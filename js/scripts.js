@@ -7,7 +7,17 @@ const editInput = document.querySelector("#edit-input");
 const cancelEditBtn = document.querySelector("#cancel-edit-btn");
 
 // Funções
+const saveTodo = (text) => {
+  const todo = document.createElement("div");
+  todo.classList.add("todo");
 
+  const todoTitle = document.createElement("h3");
+  todoTitle.innerText = text;
+  todo.appendChild(todoTitle);
+
+  console.log(todo);
+
+}
 
 // Eventos 
 todoForm.addEventListener("submit", (e) => {
