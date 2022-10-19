@@ -5,12 +5,14 @@ const todoList = document.querySelector("#todo-list");
 const editForm = document.querySelector("#edit-form");
 const editInput = document.querySelector("#edit-input");
 const cancelEditBtn = document.querySelector("#cancel-edit-btn");
-
+const searchInput = document.querySelector("#search-input");
+const eraseBtn = document.querySelector("erase-button");
+const filterBtn = document.querySelector("#filter-select");
 
 let oldInputValue;
 
 // Funções
-const saveTodo = (text) => {
+const saveTodo = (text, doe = 0, save = 1) => {
   const todo = document.createElement("div");
   todo.classList.add("todo");
 
@@ -20,23 +22,29 @@ const saveTodo = (text) => {
 
   const doneBtn = document.createElement("button");
   doneBtn.classList.add("finish-todo");
-  doneBtn.innerHTML = '<i class="fa-solid fa-check"></i>'
-  todo.appendChild(doneBtn)
+  doneBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+  todo.appendChild(doneBtn);
 
   const editBtn = document.createElement("button");
   editBtn.classList.add("edit-todo");
-  editBtn.innerHTML = '<i class="fa-solid fa-pen"></i>'
-  todo.appendChild(editBtn)
+  editBtn.innerHTML = '<i class="fa-solid fa-pen"></i>';
+  todo.appendChild(editBtn);
 
   const deleteBtn = document.createElement("button");
   deleteBtn.classList.add("remove-todo");
-  deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>'
-  todo.appendChild(deleteBtn)
+  deleteBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  todo.appendChild(deleteBtn);
 
-  todoList.appendChild(todo)
+  // Utilizando dados da localStorage
 
-  todoInput.value = "";
-  todoInput.focus();
+  if (done) {
+    todo.classList.add("done")
+  }
+
+  //todoList.appendChild(todo)
+
+ // todoInput.value = "";
+  //todoInput.focus();
  
 
 };
