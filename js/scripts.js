@@ -38,8 +38,16 @@ const saveTodo = (text, doe = 0, save = 1) => {
   // Utilizando dados da localStorage
 
   if (done) {
-    todo.classList.add("done")
+    todo.classList.add("done");
   }
+
+  if (save) {
+    saveTodoLocalStorage({ text, done: 0});
+  }
+
+  todoList.appendChild(todo);
+
+  todoInput.value = "";
 
   //todoList.appendChild(todo)
 
@@ -56,7 +64,7 @@ const toggleForms = () => {
 };
 
 const updateTodo = (text) => {
-  const todos = document.querySelectorAll(".todo")
+  const todos = document.querySelectorAll(".todo");
 
   todos.forEach((todo) => {
 
@@ -65,18 +73,66 @@ const updateTodo = (text) => {
     if(todoTitle.innerText === oldInputValue){
       todoTitle.innerText = text
 
+      //Utilizando dados da localStorage
+      updateTodoLocalStorage(oldInputValue, text);
+
     }
+  });
+};
 
+const getSearchedTodos = (search) => {
+  const todos = document.querySelectorAll(".todo");
 
+  todos.forEach((todo) =>{
+    const todoTitle = todo.querySelector("h3").innerText.toLowerCase();
 
-  })
-}
+    todo.getElementsByClassName.display = "flex";
+
+    console.log(todoTitle);
+
+    if (!todoTitle.includes(search)){
+      todo.style.display = "none";
+    }
+  });
+};
+
+const filterTodos = (filterValue) => {
+  const todos = document.querySelectorAll(".todo");
+
+  switch (filterValue) {
+    case "all":
+    todos.forEach((todo) => (todo.style.display = "flex"));
+
+    break;
+
+  case "done":
+    todos.forEach((todo) =>
+       todos.classList.contains("done")
+         ? (todo.style.display = "flex")
+         : (todo.style.display = "none")
+    );
+
+    break;
+
+    case "todo":
+    todos.forEach((todo) =>
+       !todos.classList.contains("done")
+         ? (todo.style.display = "flex")
+         : (todo.style.display = "none")
+    );
+
+    break;
+
+  default:
+    break;
+  }
+};
 
 // Eventos 
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const inputValue = todoInput.value
+    const inputValue = todoInput.value;
 
     if(inputValue){
       saveTodo(inputValue);
@@ -89,15 +145,20 @@ document.addEventListener("click", (e) =>{
   let todoTitle;
 
   if(parentEl && parentEl.querySelector("h3")) {
-    todoTitle = parentEl.querySelector("h3").innerText
+    todoTitle = parentEl.querySelector("h3").innerText || "";
   }
 
-  if (targetEl.classList.contains("finish-todo")){
+  if (targetEl.classList.contains("finish-todo")) {
     parentEl.classList.toggle("done");
+
+    updateTodoStatusLocalStorage(todoTitle);
   }
 
   if (targetEl.classList.contains("remove-todo")){
      parentEl.remove();
+     // Utilizando dados de localStorage
+     removeTodoLocalStorage(todoTitle);
+     
   } 
 
   if (targetEl.classList.contains("edit-todo")){
@@ -106,26 +167,38 @@ document.addEventListener("click", (e) =>{
      editInput.value = todoTitle
      oldInputValue = todoTitle
  } 
-
   
 });
 
 cancelEditBtn.addEventListener("edit", (e) =>{
   e.preventDefault();
-
   todoForm();
 });
 
 editForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-  e.preventDefault()
-
-  const editInputValue = editInput.value
+  const editInputValue = editInput.value;
 
   if(editInputValue) {
-    updateTodo(editInputValue)
-
+    updateTodo(editInputValue);
   }
 
-  toggleForms()
-})
+  toggleForms();
+});
+
+searchInput.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  searchInput.value = "";
+
+  searchInput.dispatchEvent(new Event("keyup"));
+});
+
+filterBtn.addEventListener("change", (e) => {
+  const filterValue = e.target.value;
+
+  filterTodos(filterValue);
+});
+
+// Local Storage
